@@ -1,0 +1,104 @@
+The Smithery Registry API provides a programmatic way to search and obtain launch configurations for Model Context Protocol (MCP) servers. This documentation will walk you through using the Registry API to obtain a WebSocket MCP server and connect to it. Note: Smithery is still in early stages of development and the API may change in the future.
+Concepts
+Smithery Registry contains an index of MCP servers. Every server may have different ways of launching or connecting to them. Server authors specify a configuration schema, which is a JSON schema that defines the structure of the configuration that is required to connect to the server.
+Authentication
+All endpoints require authentication via a bearer token. You can create an API key by clicking on your login icon, and selecting API keys in the dropdown menu. Include the following header in your API requests:
+typescript
+
+Copy
+headers: {
+'Authorization': 'Bearer your-api-token'
+}
+List Servers
+http
+
+Copy
+GET https://registry.smithery.ai/servers
+Retrieves a paginated list of all available servers.
+Query Parameters
+q (optional): Search query. We use semantic search, so treat this as a prompt.
+page (optional): Page number for pagination (default: 1)
+pageSize (optional): Number of items per page (default: 10)
+Filtering
+Text Search: Simply type any text to search semantically (e.g., machine learning)
+Owner Filter: Use owner:username to filter by repository owner (e.g., owner:smithery-ai)
+Repository Filter: Use repo:repository-name to filter by repository name (e.g., repo:fetch)
+Deployment Status: Use is:deployed to show only deployed servers
+You can combine multiple filters together. For example:
+text
+
+Copy
+owner:smithery-ai repo:fetch is:deployed machine learning
+Response
+typescript
+
+Copy
+{
+servers: Array<{
+  qualifiedName: string;
+  displayName: string;
+  description: string;
+  // Link to Smithery server page
+  homepage: string;
+  // Number of times the server has been used via tool calling
+  useCount: string;
+  // True if this server is deployed on Smithery as a WebSocket server
+  isDeployed: boolean
+  createdAt: string;
+}>;
+pagination: {
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+};
+}
+The response includes basic information about each server and pagination details to help you navigate through the list of servers.
+Get Server
+http
+
+Copy
+GET https://registry.smithery.ai/servers/{qualifiedName}
+Retrieves information about a specific server by its qualified name. The qualified name is a unique human-readable identifier for the server. You can find the qualified name from the server page's url: https://smithery.ai/server/{qualifiedName}.
+Response
+typescript
+
+Copy
+{
+qualifiedName: string;
+displayName: string;
+deploymentUrl: string;
+connections: Array<{
+  type: string;
+  url?: string;
+  configSchema: JSONSchema;
+}>;
+}
+We will return you a response containing information about the server, including its qualified name, display name, and connection details. The connection details specify how you can connect to this server.
+type: The type of connection, such as "ws" for MCP served over WebSocket.
+url: The URL to connect to.
+connections: A list of possible ways to connect to the server.
+type: Either stdio or ws (websocket).
+url: The WebSocket URL to connect to, if applicable.
+configSchema: The JSON schema for the server's configuration. You must specify a config that complies with this schema in order to connect to this server. Some servers will have no configuration required.
+Connecting to WebSocket Servers
+To connect to WebSocket servers, you have to format your URL as such:
+http
+
+Copy
+https://server.smithery.ai/${qualifiedName}/ws?config=${base64encode(config)}
+where {url} is the URL of the server served over WebSocket and config is the JSON configuration for the server that complies with the configSchema encoded in base64 format. If you're using our Typescript SDK, you can use the createSmitheryUrl function to produce the URL.
+typescript
+
+Copy
+import { WebSocketClientTransport } from "@modelcontextprotocol/sdk/client/websocket.js"
+import { createSmitheryUrl } from "@smithery/sdk/config.js"
+
+const url = createSmitheryUrl(
+"https://your-smithery-mcp-server/ws",
+{
+  ...config goes here
+},
+)
+
+const transport = new WebSocketClientTransport(url)
