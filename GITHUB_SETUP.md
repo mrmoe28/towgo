@@ -58,13 +58,36 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
 git push -u origin main
 ```
 
-## Step 5: Using GitHub Token for Authentication
+## Step 5: Using GitHub Token for Authentication (Securely)
 
-If you encounter authentication issues, use your GitHub token:
+If you encounter authentication issues, use your GitHub token with the environment variable approach for better security:
+
+1. First, set the GitHub token as an environment variable:
 
 ```bash
-# Use your token for authentication
-git remote set-url origin https://YOUR_GITHUB_TOKEN@github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+# Set the token as an environment variable (replace with your actual token)
+export GITHUB_TOKEN="your_github_token_here"
+```
+
+2. Then use the `update-git-config.sh` script (or run this command):
+
+```bash
+# Use the token from environment variable for authentication (recommended)
+git config remote.origin.url "https://x-access-token:${GITHUB_TOKEN}@github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
+```
+
+This approach is more secure than hardcoding the token in URLs or config files.
+
+## Step 6: Dealing with Large Repositories
+
+If your repository is large, you may want to clean it up:
+
+```bash
+# Use the git-cleanup.sh script to remove sensitive data and reduce size
+./git-cleanup.sh
+
+# After cleanup, force push to update the remote repository
+git push origin main --force
 ```
 
 ## Troubleshooting
@@ -81,6 +104,7 @@ Make sure:
 Try:
 - Using a personal access token instead of password
 - Generating a new token with appropriate permissions
+- Using the secure environment variable method described above
 
 ### Error: File too large
 
