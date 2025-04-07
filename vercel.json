@@ -6,10 +6,11 @@
       "use": "@vercel/node"
     },
     {
-      "src": "vercel-build.sh",
-      "use": "@vercel/static-build",
+      "src": "package.json",
+      "use": "@vercel/node",
       "config": {
-        "distDir": "dist/public"
+        "buildCommand": "npm install && npm run build",
+        "outputDirectory": "dist/public"
       }
     }
   ],
