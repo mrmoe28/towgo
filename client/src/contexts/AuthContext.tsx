@@ -152,15 +152,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log('Auth check response status:', response.status);
       
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
         if (response.status !== 401) { // 401 is expected if not authenticated
-          console.error('Unexpected error status during auth check:', response.status);
+          console.error('Auth check error:', { status: response.status, data: errorData });
           toast({
-            title: "Error",
-            description: "Failed to check authentication status.",
+            title: "Authentication Error",
+            description: errorData.message || "Failed to verify authentication status.",
             variant: "destructive",
           });
         } else {
-          console.log('User is not authenticated (401 response)');
+          console.log('User not authenticated (401)', errorData);
         }
         setUser(null);
         return false;
