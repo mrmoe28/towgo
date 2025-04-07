@@ -1,15 +1,68 @@
+# Dependencies
 node_modules/
+
+# Build outputs
 dist/
+build/
+client/dist/
+client/build/
+
+# Cache and temporary files
 .cache/
 .local/
+/tmp/
+.temp/
+.replit.cache/
+
+# Environment variables and credentials
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.git-credentials
+/tmp/.git-credentials
+
+# Logs
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database files
 *.sqlite
 *.sqlite-journal
-.env
+*.sqlite3
+*.db
+
+# Editor and IDE files
 .vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Application specific
 coverage/
 towgo-deployment.zip
 .vercel
-.git-credentials
-/tmp/.git-credentials
+
+# Large assets - exclude to reduce repo size
+attached_assets/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mp3
+*.avi
+*.wav
+*.zip
+*.tar.gz
+*.pdf
