@@ -11,7 +11,7 @@ if (!process.env.DATABASE_URL) {
 const connectionString = process.env.DATABASE_URL;
 
 // Configure postgres client with production-ready settings
-const client = postgres(connectionString, {
+export const client = postgres(connectionString, {
   max: 10, // Maximum number of connections
   idle_timeout: 20, // Max seconds to keep unused connections alive
   connect_timeout: 10, // Max seconds to wait for connection

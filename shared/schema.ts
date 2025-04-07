@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, numeric } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, numeric, primaryKey } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -29,6 +29,18 @@ export const users = pgTable("users", {
   avatar: text("avatar"),
 });
 
+export const collections = pgTable("collections", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  isPublic: boolean("is_public").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  color: text("color").default("#4F46E5"), // Default indigo color
+  icon: text("icon").default("map-pin"),   // Default icon
+});
+
 export const favorites = pgTable("favorites", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -37,6 +49,21 @@ export const favorites = pgTable("favorites", {
   address: text("address").notNull(),
   phoneNumber: text("phone_number"),
   location: jsonb("location").notNull(),
+  notes: text("notes"),
+  rating: integer("rating"),
+  tags: text("tags").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const collectionItems = pgTable("collection_items", {
+  collectionId: integer("collection_id").notNull().references(() => collections.id),
+  favoriteId: integer("favorite_id").notNull().references(() => favorites.id),
+  addedAt: timestamp("added_at").defaultNow(),
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.collectionId, table.favoriteId] }),
+  };
 });
 
 export const services = pgTable("services", {
@@ -80,6 +107,20 @@ export const insertUserSchema = createInsertSchema(users).pick({
   avatar: true,
 });
 
+export const insertCollectionSchema = createInsertSchema(collections).pick({
+  userId: true,
+  name: true,
+  description: true,
+  isPublic: true,
+  color: true,
+  icon: true,
+});
+
+export const insertCollectionItemSchema = createInsertSchema(collectionItems).pick({
+  collectionId: true,
+  favoriteId: true,
+});
+
 export const insertFavoriteSchema = createInsertSchema(favorites).pick({
   userId: true,
   placeId: true,
@@ -87,6 +128,9 @@ export const insertFavoriteSchema = createInsertSchema(favorites).pick({
   address: true,
   phoneNumber: true,
   location: true,
+  notes: true,
+  rating: true,
+  tags: true,
 });
 
 export const insertServiceSchema = createInsertSchema(services).pick({

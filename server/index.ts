@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import dotenv from "dotenv";
 import { db } from "./db";
+import { rlsMiddleware } from "./rls-helper";
 
 // Load environment variables
 dotenv.config();
@@ -38,6 +39,10 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// Apply RLS middleware after authentication middleware
+// This will add RLS capabilities to authenticated routes
+app.use(rlsMiddleware());
 
 (async () => {
   const server = await registerRoutes(app);
