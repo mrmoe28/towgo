@@ -11,3 +11,5 @@ dist/
 coverage/
 towgo-deployment.zip
 .vercel
+.git-credentials
+/tmp/.git-credentials
