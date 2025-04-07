@@ -1,0 +1,59 @@
+VERCEL DEPLOYMENT INSTRUCTIONS
+
+1. UPDATE THE BUILD SCRIPT
+--------------------------
+First, update the vercel-build-new.sh script with these contents:
+
+#!/bin/bash
+set -e
+
+echo "Starting Vercel build process..."
+
+# Copy the Vercel-specific package.json
+echo "Copying Vercel-specific package.json..."
+cp package.vercel.json package.json
+
+# Install dependencies
+echo "Installing dependencies..."
+npm install
+
+# Run build script
+echo "Building application..."
+npm run vercel-build
+
+echo "Build process completed successfully!"
+
+2. MAKE IT EXECUTABLE
+--------------------
+Run this command:
+chmod +x vercel-build-new.sh
+
+3. PUSH TO GITHUB
+----------------
+git add vercel-build-new.sh
+git commit -m "Update Vercel build script"
+git push origin main
+
+4. VERIFY IN VERCEL DASHBOARD
+----------------------------
+- Go to your Vercel project (ID: prj_743UdILDKGXsLyKWWHEUd87EF9JK)
+- Check if your GitHub repository is connected
+- Trigger a new deployment
+- Monitor the build logs for errors
+
+5. ENVIRONMENT VARIABLES
+----------------------
+Make sure these are set in your Vercel project:
+- DATABASE_URL
+- PERPLEXITY_API_KEY
+- GOOGLE_MAPS_API_KEY
+- SESSION_SECRET
+- GITHUB_CLIENT_ID (if using GitHub authentication)
+- GITHUB_CLIENT_SECRET (if using GitHub authentication)
+
+6. TROUBLESHOOTING
+----------------
+If you still get "vite: command not found", double-check:
+- The vercel.json file is using "vercel-build-new.sh" not "vercel-build.sh"
+- The package.vercel.json file includes all dependencies
+- The build script is installing dependencies before running the build
