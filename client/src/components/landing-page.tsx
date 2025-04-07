@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +22,7 @@ import { defaultReferralRewards } from '@/components/ui/referral';
 import { TowGoLogo } from '@/components/ui/logo';
 
 export function LandingPage() {
-  const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [isFirstVisit, setIsFirstVisit] = React.useState(true);
   
   return (
     <div className="min-h-screen flex flex-col">

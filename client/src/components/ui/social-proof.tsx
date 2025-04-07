@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { Card, CardContent } from './card';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { Badge } from './badge';
@@ -22,8 +22,8 @@ export interface TestimonialCarouselProps {
 }
 
 export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [isAnimating, setIsAnimating] = React.useState(false);
   
   const nextTestimonial = () => {
     if (isAnimating) return;
@@ -48,7 +48,7 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
   };
   
   // Auto-advance testimonials
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setInterval(() => {
       nextTestimonial();
     }, 8000);
@@ -166,20 +166,20 @@ export interface UserStatisticsProps {
 }
 
 export function UserStatistics({ userCount, searchCount, helpCount }: UserStatisticsProps) {
-  const [animatedUserCount, setAnimatedUserCount] = useState(userCount.total);
-  const [animatedSearchCount, setAnimatedSearchCount] = useState(searchCount);
-  const [animatedHelpCount, setAnimatedHelpCount] = useState(helpCount);
+  const [animatedUserCount, setAnimatedUserCount] = React.useState(userCount.total);
+  const [animatedSearchCount, setAnimatedSearchCount] = React.useState(searchCount);
+  const [animatedHelpCount, setAnimatedHelpCount] = React.useState(helpCount);
   
   // Simulate incrementing stats
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setInterval(() => {
-      setAnimatedUserCount(prev => prev + 1);
+      setAnimatedUserCount((prev: number) => prev + 1);
     }, 30000);
     
     return () => clearInterval(timer);
   }, []);
   
-  useEffect(() => {
+  React.useEffect(() => {
     setAnimatedUserCount(userCount.total);
     setAnimatedSearchCount(searchCount);
     setAnimatedHelpCount(helpCount);
