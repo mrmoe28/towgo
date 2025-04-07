@@ -1,8 +1,10 @@
 #!/bin/bash
-# This script is used by Vercel to build the application
+set -e
 
-# Install dependencies first
-npm install
+echo "Starting Vercel build process..."
 
-# Build the frontend and backend
-npm run build
+# Copy the Vercel-specific package.json
+echo "Copying Vercel-specific package.json..."
+cp package.vercel.json package.json
+
+echo "Build process completed successfully!"

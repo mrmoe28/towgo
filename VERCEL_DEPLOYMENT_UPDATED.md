@@ -54,7 +54,7 @@ The project is already configured with the necessary Vercel deployment files:
 - **vercel-build-new.sh** - The build script that prepares the application for deployment
 - **package.vercel.json** - Package configuration specific to Vercel deployment
 
-## Step 5: Environment Variables
+## Environment Variables
 
 Add the following environment variables in the Vercel project settings:
 
@@ -65,46 +65,37 @@ Add the following environment variables in the Vercel project settings:
 - `GITHUB_CLIENT_ID`: Your GitHub OAuth client ID (if using GitHub authentication)
 - `GITHUB_CLIENT_SECRET`: Your GitHub OAuth client secret (if using GitHub authentication)
 
-## Step 6: Deploy
-
-Click "Deploy" to start the deployment process.
-
-## Step 7: Configure Domain (Optional)
-
-1. In your project settings, navigate to the "Domains" tab
-2. Add your custom domain if you have one
-
-## Troubleshooting
+## Troubleshooting Common Issues
 
 ### Build Errors
 
-If you encounter build errors:
-
-1. Check the build logs in the Vercel dashboard
-2. Verify your environment variables are correctly set
-3. Make sure your database is accessible from Vercel
+If you encounter the "vite: command not found" error:
+1. Make sure your project is using the new `vercel-build-new.sh` script in your vercel.json configuration
+2. The script should be setting up your package.json correctly before running the build command
 
 ### Database Connection Issues
 
 If your app can't connect to the database:
-
 1. Ensure your `DATABASE_URL` is correctly formatted
 2. Check if your database provider allows connections from Vercel's IP ranges
-3. If using a local database, consider using a cloud-hosted database
+3. If using a local database, consider using a cloud-hosted database like Neon.tech
 
-### OAuth Configuration
+### GitHub OAuth Configuration
 
 For GitHub OAuth:
-
 1. Update your GitHub OAuth app's callback URL to match your Vercel deployment URL
 2. The callback URL should be: `https://your-vercel-app.vercel.app/auth/github/callback`
 
 ## Updating Your Deployment
 
-To update your deployment:
+When you make changes to your application:
 
-1. Make changes to your local code
-2. Create a new deployment package
-3. Deploy again using the same steps above
+1. Push your changes to GitHub if using GitHub integration
+2. If deploying manually, run the Vercel CLI commands again
 
-Alternatively, connect your GitHub repository to Vercel for automatic deployments.
+## Monitoring Your Deployment
+
+After deployment:
+1. Visit the Vercel dashboard to monitor your application
+2. Check server logs for any issues
+3. Set up alerts for application errors or performance issues
