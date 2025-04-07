@@ -1,17 +1,31 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Import the main server logic
+import { createServer } from './index.js';
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Serve static files
-app.use(express.static(path.join(__dirname)));
+// Create and setup the server
+const server = await createServer(app);
 
-// Route for the download page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'download.html'));
+// For production, serve the static client files
+app.use(express.static(path.join(__dirname, 'client')));
+
+// Send all non-API routes to the client app
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api/')) {
+    res.sendFile(path.join(__dirname, 'client', 'index.html'));
+  }
 });
 
 // Start the server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Download server running at http://0.0.0.0:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`TowAgent server running at http://0.0.0.0:${PORT}`);
 });
