@@ -1,3 +1,4 @@
+
 #!/bin/bash
 set -e
 
@@ -7,12 +8,13 @@ echo "Starting Vercel build process..."
 echo "Copying Vercel-specific package.json..."
 cp package.vercel.json package.json
 
-# Install dependencies (done by Vercel automatically)
-echo "Vercel will install dependencies automatically..."
+# Install dependencies if needed
+echo "Installing dependencies..."
+npm install
 
 # Run build script
 echo "Building application..."
-npm run vercel-build
+npx vite build
 
 # Ensure server.js is copied to dist directory
 echo "Copying server.js to dist directory..."
