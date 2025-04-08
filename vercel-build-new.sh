@@ -1,24 +1,16 @@
-
 #!/bin/bash
 set -e
 
 echo "Starting Vercel build process..."
 
-# Copy the Vercel-specific package.json
-echo "Copying Vercel-specific package.json..."
-cp package.vercel.json package.json
-
-# Install dependencies and build
+# Install dependencies
 echo "Installing dependencies..."
 npm install
 
-# Run build script
+# Build the application
 echo "Building application..."
-npm run vercel-build
-
-# Ensure server.js is copied to dist directory
-echo "Copying server.js to dist directory..."
-cp server.js dist/server.js
+npx vite build
+npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
 
 # Create necessary directories for Vercel
 echo "Setting up directory structure for Vercel..."

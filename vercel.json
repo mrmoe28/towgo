@@ -3,6 +3,10 @@
   "version": 2,
   "builds": [
     {
+      "src": "server/index.ts",
+      "use": "@vercel/node"
+    },
+    {
       "src": "vercel-build-new.sh",
       "use": "@vercel/static-build",
       "config": {
