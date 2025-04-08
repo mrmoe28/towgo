@@ -8,13 +8,13 @@ echo "Starting Vercel build process..."
 echo "Copying Vercel-specific package.json..."
 cp package.vercel.json package.json
 
-# Install dependencies if needed
+# Install dependencies and build
 echo "Installing dependencies..."
 npm install
 
 # Run build script
 echo "Building application..."
-npx vite build
+npm run vercel-build
 
 # Ensure server.js is copied to dist directory
 echo "Copying server.js to dist directory..."
